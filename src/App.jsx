@@ -1,13 +1,13 @@
 import './App.css'
 import Logo from './components/logo/Logo';
-import UserProfilePage from './pages/userProfile/UserProfile'
+import EmployeePage from './pages/employeePage/EmployeePage';
 
 function App() {
 
   return (
     <>
       <Logo></Logo>
-      <UserProfilePage></UserProfilePage>
+      <EmployeePage></EmployeePage>
     </>
   )
 }
