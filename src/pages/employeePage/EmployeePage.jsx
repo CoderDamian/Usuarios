@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import EmployeeTable from '../../components/employeeTable/EmployeeTable';
 import EmployeeService from '../../services/employeeService';
+import EmployeeFilter from '../../components/employeeFilter/employeeFilter';
 
 const EmployeePage = () => {
     const [empleados, setEmpleados] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [filterText, setFilterText] = useState('');
 
     const url = 'https://jsonplaceholder.typicode.com/users';
 
@@ -26,20 +28,31 @@ const EmployeePage = () => {
 
     if (error) return <p>{error.message}</p>
     if (loading) return <p>Loading...</p>;
-    
-    function handleDelete(empleadoId) {
-        alert('deleting... ' + empleadoId);
+
+    async function handleDelete(empleadoId) {
+        const result = await EmployeeService.deleteEmployee(empleadoId);
+        alert(`empleado ${empleadoId} fue eliminado`);
     }
 
     function handleUpdate(empleadoId) {
         alert('updating...' + empleadoId);
     }
 
+    function handleFilterChange(newValue) {
+        setFilterText(newValue);
+    }
+
     return (
-        <EmployeeTable
-            empleados={empleados}
-            onDelete={handleDelete}
-            onUpdate={handleUpdate} />
+        <>
+            <EmployeeFilter
+                filterText={filterText}
+                onFilterChange={handleFilterChange} />
+
+            <EmployeeTable
+                empleados={empleados.filter(e => e.name.toLowerCase().includes(filterText.toLowerCase()))}
+                onDelete={handleDelete}
+                onUpdate={handleUpdate} />
+        </>
     )
 }
 
