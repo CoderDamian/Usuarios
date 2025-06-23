@@ -1,30 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import EmployeeTable from '../../components/employeeTable/EmployeeTable';
-import EmployeeService from '../../services/employeeService';
 import EmployeeFilter from '../../components/employeeFilter/employeeFilter';
+import useEmployees from '../../hooks/useEmployees';
 
 const EmployeePage = () => {
-    const [empleados, setEmpleados] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [filterText, setFilterText] = useState('');
-
-    const url = 'https://jsonplaceholder.typicode.com/users';
-
-    useEffect(() => {
-        const fetchEmpleados = async () => {
-            try {
-                const data = await EmployeeService.getEmployees();
-                setEmpleados(data);
-            } catch (err) {
-                setError(err);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchEmpleados();
-    }, []);
+    const [renderCount, setRenderCount]=useState(0);
+    const { empleados, loading, error } = useEmployees();
 
     if (error) return <p>{error.message}</p>
     if (loading) return <p>Loading...</p>;
@@ -39,11 +21,14 @@ const EmployeePage = () => {
     }
 
     function handleFilterChange(newValue) {
+        setRenderCount(renderCount + 1);
         setFilterText(newValue);
     }
 
     return (
         <>
+            <p>renderizaciones: {renderCount}</p>
+
             <EmployeeFilter
                 filterText={filterText}
                 onFilterChange={handleFilterChange} />
