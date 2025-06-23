@@ -27,8 +27,8 @@ const EmployeePage = () => {
 
     return (
         <>
-            <p>renderizados: {renderCount}</p>
-            
+            <p>renderizaciones: {renderCount}</p>
+
             <EmployeeFilter
                 filterText={filterText}
                 onFilterChange={handleFilterChange} />
